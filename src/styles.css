@@ -109,3 +109,11 @@ mat-sidenav {
 .mat-sidenav-content .mat-list-item {
   height: auto !important;
 }
+
+.error {
+    margin: 16px 0;
+    padding: 12px 16px;
+    border-left: 4px solid #d32f2f;
+    background: #fdecea;
+    color: #611a15;
+}

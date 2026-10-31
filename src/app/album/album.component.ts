@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../auth.service';
 import { MusicDataService } from '../musica-data.service';
-//import * as data from '../data/SearchResultsAlbum.json';
+
 @Component({
   selector: 'app-album',
   templateUrl: './album.component.html',
@@ -11,24 +12,30 @@ import { MusicDataService } from '../musica-data.service';
 })
 export class AlbumComponent implements OnInit, OnDestroy {
   album: any;
+  error: string;
 
-  id: number;
+  id: string;
   sub: Subscription;
-  constructor(private msb: MatSnackBar, private route: ActivatedRoute, private mds: MusicDataService) { }
+  constructor(private msb: MatSnackBar, private route: ActivatedRoute, private router: Router,
+    private auth: AuthService, private mds: MusicDataService) { }
 
   ngOnInit(): void {
-    //this.album = (data as any).default;
-    // this.sub = this.route.params.subscribe(params => {
-    //   this.id = +params['id'];
-    // });
     this.id = this.route.snapshot.params['id'];
-    this.sub = this.mds.getAlbumById(this.id).subscribe(data => this.album = data);
+    this.sub = this.mds.getAlbumById(this.id).subscribe(
+      data => this.album = data,
+      err => this.error = this.mds.describeSpotifyError(err)
+    );
   }
 
-  addToFavourites(trackID: number) {
-    // if (this.mds.addToFavourites(trackID)) {
-    //   this.msb.open("Adding to Favourites...", "Done", { duration: 1500 });
-    // }
+  addToFavourites(trackID: string) {
+    // Listening is open to everyone; saving a preference is what needs an
+    // account, so the prompt happens here rather than at the route.
+    if (!this.auth.isAuthenticated()) {
+      this.msb.open("Log in to save favourites", "Log in", { duration: 5000 })
+        .onAction().subscribe(() => this.router.navigate(['/login']));
+      return;
+    }
+
     this.mds.addToFavourites(trackID).subscribe(
       (data) => {
         this.msb.open("Adding to Favourites...", "Done", { duration: 1500 });

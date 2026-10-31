@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SpotifyTokenService } from './spotify-token.service';
 import { environment } from './../environments/environment';
-import { mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -101,5 +101,38 @@ export class MusicDataService {
         return new Observable(o => o.next({ tracks: [] }));
       }
     }));
+  }
+
+  // The 403 the Web API now returns when the app owner has no Premium
+  // subscription arrives as an empty page otherwise, with the reason only in
+  // the console.
+  describeSpotifyError(err: any): string {
+    if (err?.status === 403) {
+      return "Spotify refused this request (403). The Web API now requires the owner of the developer app to hold an active Premium subscription.";
+    }
+
+    if (err?.status === 401) {
+      return "Spotify rejected the credentials (401). Check clientID and clientSecret in environment.ts.";
+    }
+
+    if (err?.status === 429) {
+      return "Spotify is rate limiting this app (429). Try again in a minute.";
+    }
+
+    return "Could not load data from Spotify" + (err?.status ? ` (HTTP ${err.status}).` : ".");
+  }
+
+  // Spotify stopped returning preview_url on the Web API in late 2024, so the
+  // 30-second clip comes from the iTunes Search API instead: no key, no auth,
+  // and it sends Access-Control-Allow-Origin: *.
+  getPreviewUrl(trackName: string, artistName: string): Observable<string> {
+    if (!trackName) {
+      return new Observable(o => o.next(null));
+    }
+
+    const term = encodeURIComponent(`${artistName || ''} ${trackName}`.trim());
+
+    return this.http.get<any>(`https://itunes.apple.com/search?term=${term}&entity=song&limit=1&country=US`)
+      .pipe(map(res => res.resultCount > 0 ? res.results[0].previewUrl : null));
   }
 }

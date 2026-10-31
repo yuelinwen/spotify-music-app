@@ -9,6 +9,7 @@ import { MusicDataService } from '../musica-data.service';
 })
 export class NewReleasesComponent implements OnInit, OnDestroy {
   releases: any;
+  error: string;
   releasesSub: any;
 
   constructor(private mds: MusicDataService) { }
@@ -19,7 +20,8 @@ export class NewReleasesComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.releases = data.albums.items;
-        }
+        },
+        err => this.error = this.mds.describeSpotifyError(err)
       )
   }
 

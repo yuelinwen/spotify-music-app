@@ -13,6 +13,7 @@ import { MusicDataService } from '../musica-data.service';
 export class ArtistDiscographyComponent implements OnInit, OnDestroy {
   albums: Array<any>;
   artist: any;
+  error: string;
 
   sub: Subscription;
 
@@ -25,11 +26,15 @@ export class ArtistDiscographyComponent implements OnInit, OnDestroy {
 
     this.sub = this.route.params.subscribe(params => {
       //this.id = +params['id'];
-      this.mds.getAlbumsByArtistId(id).subscribe(data => this.albums = data.items.filter((thing, index, self) =>
-        index === self.findIndex((t) => (
-          t.place === thing.place && t.name === thing.name
-        ))));
-      this.mds.getArtistById(id).subscribe(data => this.artist = data);
+      this.mds.getAlbumsByArtistId(id).subscribe(
+        data => this.albums = data.items.filter((thing, index, self) =>
+          index === self.findIndex((t) => (
+            t.place === thing.place && t.name === thing.name
+          ))),
+        err => this.error = this.mds.describeSpotifyError(err));
+      this.mds.getArtistById(id).subscribe(
+        data => this.artist = data,
+        err => this.error = this.mds.describeSpotifyError(err));
     });
   }
 

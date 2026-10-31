@@ -1,0 +1,10 @@
+<div class="preview">
+  <button mat-stroked-button *ngIf="state === 'idle' && !previewUrl" (click)="loadPreview()">
+    <mat-icon>play_arrow</mat-icon>&nbsp;Preview
+  </button>
+
+  <span class="preview-note" *ngIf="state === 'loading'">Finding a preview&hellip;</span>
+  <span class="preview-note" *ngIf="state === 'missing'">No preview available for this track</span>
+
+  <audio *ngIf="previewUrl" controls autoplay [src]="previewUrl"></audio>
+</div>

@@ -1,0 +1,13 @@
+.preview {
+    margin-top: 10px;
+}
+
+.preview-note {
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+audio {
+    max-width: 100%;
+    vertical-align: middle;
+}

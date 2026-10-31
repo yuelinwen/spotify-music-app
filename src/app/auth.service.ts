@@ -22,7 +22,7 @@ export class AuthService {
 
   public readToken(): any {
     const token = localStorage.getItem('access_token');
-    return helper.decodeToken(token);
+    return token ? helper.decodeToken(token) : null;
   }
 
   isAuthenticated(): boolean {

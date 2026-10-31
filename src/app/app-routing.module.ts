@@ -11,11 +11,13 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { RegisterComponent } from './register/register.component';
 import { SearchResultComponent } from './search-result/search-result.component';
 
-const routes: Routes = [{ path: 'newReleases', component: NewReleasesComponent, canActivate: [GuardAuthService] },
-{ path: 'artist/:id', component: ArtistDiscographyComponent, canActivate: [GuardAuthService] },
-{ path: 'album/:id', component: AlbumComponent, canActivate: [GuardAuthService] },
-{ path: 'about', component: AboutComponent, canActivate: [GuardAuthService] },
-{ path: "search", component: SearchResultComponent, canActivate: [GuardAuthService] },
+// Browsing and listening are open to everyone. Only favourites are a saved
+// preference, so only favourites need an account.
+const routes: Routes = [{ path: 'newReleases', component: NewReleasesComponent },
+{ path: 'artist/:id', component: ArtistDiscographyComponent },
+{ path: 'album/:id', component: AlbumComponent },
+{ path: 'about', component: AboutComponent },
+{ path: "search", component: SearchResultComponent },
 { path: "favourites", component: FavouritesComponent, canActivate: [GuardAuthService] },
 { path: 'register', component: RegisterComponent },
 { path: 'login', component: LoginComponent },

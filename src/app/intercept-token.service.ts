@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { environment } from './../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -16,13 +17,15 @@ export class InterceptTokenService implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    // Clone the existing request, and add the authorization header
+    // Only our own user API gets the token. Sending it to a third party turns
+    // a simple cross-origin GET into a preflighted one, which iTunes rejects,
+    // and when logged out it used to send the literal string "JWT null".
+    const token = this.a.getToken();
 
-    if (!request.url.includes("spotify.com")) {
-      // clone the request and use the "setHeaders" property to set an "Authorization" header, etc.
+    if (token && request.url.startsWith(environment.userAPIBase)) {
       request = request.clone({
         setHeaders: {
-          Authorization: `JWT ${this.a.getToken()}`
+          Authorization: `JWT ${token}`
         }
       });
     }

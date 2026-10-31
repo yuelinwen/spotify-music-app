@@ -11,6 +11,7 @@ import { MusicDataService } from '../musica-data.service';
 export class SearchResultComponent implements OnInit, OnDestroy {
   results: any;
   searchQuery: any;
+  error: string;
 
   sub: Subscription;
   constructor(private route: ActivatedRoute, private mds: MusicDataService) { }
@@ -19,9 +20,13 @@ export class SearchResultComponent implements OnInit, OnDestroy {
 
     this.sub = this.route.queryParams.subscribe(params => {
       this.searchQuery = params['q'] || 0;
-      this.mds.searchArtists(this.searchQuery).subscribe(data => {
-        this.results = data.artists.items.filter((item: any) => item.images.length > 0);
-      });
+      this.error = null;
+      this.mds.searchArtists(this.searchQuery).subscribe(
+        data => {
+          this.results = data.artists.items.filter((item: any) => item.images.length > 0);
+        },
+        err => this.error = this.mds.describeSpotifyError(err)
+      );
     })
 
     // this.searchQuery = (this.route.snapshot.queryParams['q' || 0]);

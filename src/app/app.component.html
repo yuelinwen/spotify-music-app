@@ -3,7 +3,7 @@
   <!-- Top navbar -->
   <mat-toolbar class="navbar" color="primary">
 
-    <button mat-icon-button (click)="snav.toggle()" *ngIf="token">
+    <button mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
 
@@ -30,11 +30,24 @@
 
     </mat-menu>
 
+    <!-- Signed out: browsing and listening need no account, so offer the way
+         in rather than hiding the app behind it. -->
+    <ng-container *ngIf="!token">
+      <a mat-button routerLink="/login">
+        <mat-icon>login</mat-icon>
+        <span fxShow fxHide.xs>&nbsp;Log in</span>
+      </a>
+      <a mat-button routerLink="/register">
+        <mat-icon>account_box</mat-icon>
+        <span fxShow fxHide.xs>&nbsp;Register</span>
+      </a>
+    </ng-container>
+
   </mat-toolbar>
 
   <mat-sidenav-container>
     <!-- Side nav -->
-    <mat-sidenav #snav [opened]="token && snav.opened" [mode]="'side'" [fixedInViewport]="true" fixedTopGap="56">
+    <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="true" fixedTopGap="56">
 
       <mat-nav-list>
         <div>

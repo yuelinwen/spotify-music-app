@@ -30,6 +30,8 @@ import { SearchResultComponent } from './search-result/search-result.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { InterceptTokenService } from './intercept-token.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { PreviewPlayerComponent } from './preview-player/preview-player.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { InterceptTokenService } from './intercept-token.service';
     FavouritesComponent,
     SearchResultComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    PreviewPlayerComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +65,8 @@ import { InterceptTokenService } from './intercept-token.service';
     FlexLayoutModule,
     HttpClientModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
 
   ],
   providers: [{

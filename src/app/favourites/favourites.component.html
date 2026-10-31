@@ -2,22 +2,30 @@
 <p>The following is a list of your favourite songs from various artists.<br /> Click the &nbsp;<mat-icon mat-list-icon>
         queue_music</mat-icon>&nbsp; icon to <strong>remove</strong> a song from your list </p>
 
+<div class="error" *ngIf="error">{{error}}</div>
+
+<p *ngIf="favourites && favourites.length === 0">
+    You have not saved any favourites yet. Open an album and click the
+    <mat-icon mat-list-icon>queue_music</mat-icon> icon beside a track.
+</p>
+
 <br />
 
 <mat-list *ngFor="let track of favourites">
 
     <!-- single "favourite" card -->
     <mat-list-item>
-        <mat-icon mat-list-icon (click)="removeFromFavourites(track.id)">queue_music</mat-icon>
+        <mat-icon mat-list-icon (click)="removeFromFavourites(track.id)" matTooltip="Remove from favourites">queue_music
+        </mat-icon>
         <div mat-line>
             <mat-card>
-                <mat-card-content><strong>{{track.name}}</strong> - {{track.duration}}<br /><br />
+                <mat-card-content><strong>{{track.name}}</strong> - {{(track.duration_ms/60000).toFixed(2)}}<br /><br />
                     Artist(s):
                     <span *ngFor="let artist of track.artists">
                         <a [routerLink]="['/artist',artist.id]">{{artist.name}}</a>&nbsp;&nbsp;</span>
                     <br />
                     Album: <a [routerLink]="['/album',track.album.id]"> {{track.album.name}}</a><br />
-                    <div *ngIf="track.preview_url"><br /><audio controls [src]="track.preview_url"></audio></div>
+                    <app-preview-player [track]="track"></app-preview-player>
                 </mat-card-content>
 
             </mat-card>

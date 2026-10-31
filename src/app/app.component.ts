@@ -34,6 +34,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.searchString = '';
+
+    // Read once up front as well: on a full page load the first navigation has
+    // already started by the time this subscription exists, so a logged-in user
+    // used to see the signed-out navbar until they clicked something.
+    this.token = this.auth.readToken();
+
     this.sub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.token = this.auth.readToken();
@@ -48,7 +54,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     localStorage.clear();
-    this.router.navigate(['login']);
+    this.token = null;
+    this.router.navigate(['newReleases']);
   }
 
   ngOnDestroy() {
