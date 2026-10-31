@@ -17,26 +17,14 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private mds: MusicDataService) { }
 
   ngOnInit(): void {
-
     this.sub = this.route.queryParams.subscribe(params => {
-      this.searchQuery = params['q'] || 0;
+      this.searchQuery = params['q'] || '';
       this.error = null;
       this.mds.searchArtists(this.searchQuery).subscribe(
-        data => {
-          this.results = data.artists.items.filter((item: any) => item.images.length > 0);
-        },
-        err => this.error = this.mds.describeSpotifyError(err)
+        data => this.results = data,
+        err => this.error = this.mds.describeError(err)
       );
     })
-
-    // this.searchQuery = (this.route.snapshot.queryParams['q' || 0]);
-
-    // this.sub = this.mds.searchArtists(this.searchQuery)
-    //   .subscribe(data => {
-    //     this.results = data.artists.items.filter(
-    //       (item) => item.images.length > 0
-    //     );
-    //   })
   }
 
   ngOnDestroy() {

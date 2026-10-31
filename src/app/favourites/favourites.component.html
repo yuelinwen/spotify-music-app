@@ -19,12 +19,9 @@
         </mat-icon>
         <div mat-line>
             <mat-card>
-                <mat-card-content><strong>{{track.name}}</strong> - {{(track.duration_ms/60000).toFixed(2)}}<br /><br />
-                    Artist(s):
-                    <span *ngFor="let artist of track.artists">
-                        <a [routerLink]="['/artist',artist.id]">{{artist.name}}</a>&nbsp;&nbsp;</span>
-                    <br />
-                    Album: <a [routerLink]="['/album',track.album.id]"> {{track.album.name}}</a><br />
+                <mat-card-content><strong>{{track.name}}</strong> - {{(track.durationMs/60000).toFixed(2)}}<br /><br />
+                    Artist: <a [routerLink]="['/artist',track.artistId]">{{track.artistName}}</a><br />
+                    Album: <a [routerLink]="['/album',track.albumId]">{{track.albumName}}</a><br />
                     <app-preview-player [track]="track"></app-preview-player>
                 </mat-card-content>
 

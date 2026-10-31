@@ -1,15 +1,16 @@
 <div class="error" *ngIf="error">{{error}}</div>
 
 <h2>{{artist?.name}}</h2>
-<p>Full discography for {{artist?.name}}<br>
+<p *ngIf="artist">{{artist.genre}}<br>
     Click the <strong>album cover</strong> for more information.</p>
-<mat-card *ngIf="artist?.images?.length" [style.background]="'url(' +
-    (artist.images[1] || artist.images[0]).url + ')
+
+<!-- iTunes serves no artist photo, so the newest cover stands in for one. -->
+<mat-card *ngIf="albums?.length" [style.background]="'url(' + albums[0].artwork + ')
     no-repeat center center'" [style.background-size]="'cover'" [style.height]="'450px'">
 </mat-card>
 
 <br /><br />
-<h1 *ngIf="artist">Full Discography</h1>
+<h1 *ngIf="albums?.length">Full Discography</h1>
 
 <div fxLayout="row wrap" fxLayout.xs="column">
 
@@ -18,13 +19,13 @@
         <mat-card [style.min-width]="'200px'">
             <mat-card-header>
                 <mat-card-title>{{album.name}}</mat-card-title>
-                <mat-card-subtitle>Album Title</mat-card-subtitle>
+                <mat-card-subtitle>{{album.genre}}</mat-card-subtitle>
             </mat-card-header>
-            <img *ngIf="album.images?.length" mat-card-image class="album-cover"
-                src="{{ album.images[0].url }}" alt="album art" [routerLink]="['/album',album.id]">
+            <img *ngIf="album.artwork" mat-card-image class="album-cover" [src]="album.artwork" alt="album art"
+                [routerLink]="['/album',album.id]">
 
-            <strong>Release Date: </strong>{{album.release_date}}<br />
-            <strong>Tracks: </strong>{{album.total_tracks}}
+            <strong>Release Date: </strong>{{album.releaseDate}}<br />
+            <strong>Tracks: </strong>{{album.trackCount}}
         </mat-card>
     </div>
     <!-- -->

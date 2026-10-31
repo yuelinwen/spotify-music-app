@@ -1,10 +1,13 @@
 <div class="preview">
-  <button mat-stroked-button *ngIf="state === 'idle' && !previewUrl" (click)="loadPreview()">
-    <mat-icon>play_arrow</mat-icon>&nbsp;Preview
-  </button>
+  <ng-container *ngIf="track?.previewUrl; else noPreview">
+    <audio controls preload="none" [src]="track.previewUrl"></audio>
+    <div class="preview-note">
+      Preview provided courtesy of iTunes &middot;
+      <a *ngIf="track.url" [href]="track.url" target="_blank" rel="noopener">Listen on Apple Music</a>
+    </div>
+  </ng-container>
 
-  <span class="preview-note" *ngIf="state === 'loading'">Finding a preview&hellip;</span>
-  <span class="preview-note" *ngIf="state === 'missing'">No preview available for this track</span>
-
-  <audio *ngIf="previewUrl" controls autoplay [src]="previewUrl"></audio>
+  <ng-template #noPreview>
+    <span class="preview-note">No preview available for this track</span>
+  </ng-template>
 </div>

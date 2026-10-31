@@ -1,43 +1,40 @@
 <div class="error" *ngIf="error">{{error}}</div>
 
 <h2>{{album?.name}}</h2>
-<p>Full track listing for {{album?.name}}</p>
+<p *ngIf="album">Full track listing for {{album.name}}</p>
 
 
-<mat-card>
+<mat-card *ngIf="album">
     <mat-card-content fxLayout="row wrap" fxLayout.xs="column">
-        <div fxflex><img *ngIf="album?.images?.length" src="{{ (album.images[1] || album.images[0]).url }}"
-                alt="album cover" [style.margin]="'10px'" [style.max-width]="'90%'" /></div>
+        <div fxflex><img *ngIf="album.artwork" [src]="album.artwork" alt="album cover" [style.margin]="'10px'"
+                [style.max-width]="'90%'" /></div>
         <div fxFlex>
             <div [style.min-width]="'300px'" [style.margin]="'10px'">
-                <strong>Record Label: </strong> {{album?.label}}<br />
-                <strong>Release Date: </strong> {{album?.release_date}}<br /><br />
-                <strong>Tracks:</strong> {{album?.total_tracks}}<br />
-                <strong>Popularity: </strong>{{album?.popularity}}<br /><br />
+                <strong>Genre: </strong> {{album.genre}}<br />
+                <strong>Release Date: </strong> {{album.releaseDate}}<br /><br />
+                <strong>Tracks:</strong> {{album.trackCount}}<br /><br />
                 <mat-chip-list aria-label="Artist selection">
-                    <mat-chip *ngFor="let artist of album?.artists" [routerLink]="['/artist',artist.id]">
-                        {{artist.name}}
-                    </mat-chip>
+                    <mat-chip [routerLink]="['/artist',album.artistId]">{{album.artistName}}</mat-chip>
                 </mat-chip-list>
                 <br />
 
-                <div *ngFor="let copyright of album?.copyrights">{{copyright.text}}</div>
+                <div>{{album.copyright}}</div>
             </div>
         </div>
     </mat-card-content>
 </mat-card>
 <br /><br />
-<h2 *ngIf="album">Track Listing</h2>
+<h2 *ngIf="tracks?.length">Track Listing</h2>
 
 <mat-list>
     <!-- Single "Responsive" Material List Item-->
-    <mat-list-item *ngFor="let track of album?.tracks?.items">
+    <mat-list-item *ngFor="let track of tracks">
         <mat-icon mat-list-icon (click)="addToFavourites(track.id)" matTooltip="Add to favourites">queue_music
         </mat-icon>
         <div mat-line>
             <mat-card>
-                <mat-card-content>{{track.track_number}}. {{track.name}} -
-                    {{(track.duration_ms/60000).toFixed(2)}}
+                <mat-card-content>{{track.trackNumber}}. {{track.name}} -
+                    {{(track.durationMs/60000).toFixed(2)}}
                     <!-- NOTE 3.34 was determined by using (duration_ms / 60000).toFixed(2) -->
                 </mat-card-content>
                 <app-preview-player [track]="track"></app-preview-player>

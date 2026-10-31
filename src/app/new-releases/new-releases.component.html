@@ -1,7 +1,7 @@
 <div class="error" *ngIf="error">{{error}}</div>
 
 <h2>New Releases</h2>
-<p>The following is a list of new releases. <br>
+<p>The following is a list of albums currently charting on Apple Music. <br>
     Click the album cover or artist name for more information</p>
 <div class="content">
     <div fxLayout="row wrap" fxLayout.xs="column">
@@ -11,18 +11,15 @@
             <mat-card [style.min-width]="'200px'">
                 <mat-card-header>
                     <mat-card-title>{{release.name}}</mat-card-title>
-                    <mat-card-subtitle>New Release</mat-card-subtitle>
+                    <mat-card-subtitle>{{release.genre}}</mat-card-subtitle>
                 </mat-card-header>
-                <img *ngIf="release.images?.length" mat-card-image class="album-cover"
-                    src="{{ release.images[0].url }}" alt="album art" [routerLink]="['/album',release.id]">
+                <img *ngIf="release.artwork" mat-card-image class="album-cover" [src]="release.artwork"
+                    alt="album art" [routerLink]="['/album',release.id]">
 
-                <strong>Release Date: </strong>{{release.release_date}}<br />
-                <strong>Tracks: </strong>{{release.total_tracks}}<br /><br />
+                <strong>Release Date: </strong>{{release.releaseDate}}<br /><br />
                 <mat-card-content>
                     <mat-chip-list aria-label="Artist selection">
-
-                        <mat-chip *ngFor="let artist of release.artists" [routerLink]="['/artist', artist.id]">
-                            {{artist.name}}</mat-chip>
+                        <mat-chip [routerLink]="['/artist', release.artistId]">{{release.artistName}}</mat-chip>
                     </mat-chip-list>
                 </mat-card-content>
             </mat-card>

@@ -4,6 +4,8 @@
 <p>The following is a list of artists matching the query.<br />
     Click the <strong>artist image</strong> for more information.</p>
 
+<p *ngIf="results && results.length === 0">No artists matched that search.</p>
+
 <br />
 
 <div class="content">
@@ -14,14 +16,10 @@
             <mat-card [style.min-width]="'200px'">
                 <mat-card-header>
                     <mat-card-title>{{result.name}}</mat-card-title>
-                    <mat-card-subtitle>{{result.type}}</mat-card-subtitle>
+                    <mat-card-subtitle>{{result.genre}}</mat-card-subtitle>
                 </mat-card-header>
-                <img [routerLink]="['/artist',result.id]" mat-card-image class="album-cover"
-                    src="{{ (result.images[1] || result.images[0]).url }}" alt="artist art">
-                <mat-card-content>
-                    <strong>Followers: </strong>{{result.followers.total}}<br />
-                    <strong>Popularity: </strong>{{result.popularity}}
-                </mat-card-content>
+                <img *ngIf="result.artwork" [routerLink]="['/artist',result.id]" mat-card-image class="album-cover"
+                    [src]="result.artwork" alt="artist art">
             </mat-card>
         </div>
         <!-- -->

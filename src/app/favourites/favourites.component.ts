@@ -16,16 +16,16 @@ export class FavouritesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.mds.getFavourites()
       .subscribe(
-        data => this.favourites = data.tracks,
-        err => this.error = this.mds.describeSpotifyError(err)
+        data => this.favourites = data,
+        err => this.error = this.mds.describeError(err)
       )
   }
 
   removeFromFavourites(id: any) {
     this.mds.removeFromFavourites(id)
       .subscribe(
-        data => this.favourites = data.tracks,
-        err => this.error = this.mds.describeSpotifyError(err)
+        data => this.favourites = data,
+        err => this.error = this.mds.describeError(err)
       );
   }
 
